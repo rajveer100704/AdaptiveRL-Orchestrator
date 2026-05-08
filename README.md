@@ -149,7 +149,7 @@ While the current system proves the efficacy of hierarchical learned control, se
 ### 👤 Author
 **Rajveer Singh Saggu**
 - High-Performance Systems & Adaptive ML Infrastructure
-- [GitHub](https://github.com/rajveer100704) | [LinkedIn](https://www.linkedin.com/in/rajveer-singh-saggu/)
+- [GitHub](https://github.com/rajveer100704) | [LinkedIn](https://www.linkedin.com/in/rajveer-singh-saggu-13aa9529a/)
 
 ### 🤝 Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
