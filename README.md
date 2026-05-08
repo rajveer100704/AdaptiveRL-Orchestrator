@@ -148,7 +148,7 @@ While the current system proves the efficacy of hierarchical learned control, se
 
 ---
 
-## 8. Author & Contributions
+## 10. Author & Contributions
 
 ### 👤 Author
 **Rajveer Singh Saggu**
