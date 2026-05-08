@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+debug.log
+
+# Benchmarks / Data
+# We keep the final report but ignore raw JSON traces to keep repo light
+# benchmarks/results/*.json
+
+# Docker
+.docker_compose_data/
+
+# OS
+.DS_Store
+Thumbs.db
