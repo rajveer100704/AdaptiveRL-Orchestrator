@@ -14,10 +14,8 @@ Modern AI serving infrastructure faces a fundamental conflict between **Resource
 
 ---
 
-## 2. Architecture Overview
-![Architecture](docs/images/architecture.png)
 
-## 3. Live Platform Demo & Comparison
+## 2. Live Platform Demo & Comparison
 Explore the [**Full Project Demo & Comparison**](docs/project_demo.md) for detailed performance breakdowns.
 
 ![Live Platform Demo](docs/images/platform_demo.webp)
