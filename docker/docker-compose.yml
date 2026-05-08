@@ -1,0 +1,101 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orchestrator
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  gateway:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - POSTGRES_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/orchestrator
+      - GATEWAY_TIMEOUT_MS=5000
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  worker-manager:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.worker
+    command: ["uv", "run", "python", "workers/worker_pool_manager.py"]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - POSTGRES_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/orchestrator
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  autoscaler:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.gateway
+    command: ["uv", "run", "python", "scaling/autoscaler.py"]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - POSTGRES_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/orchestrator
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - gateway
+      - worker-manager
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # UI
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./grafana_dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./dashboards:/etc/grafana/provisioning/dashboards/adaptive_orchestrator
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - prometheus
+
+

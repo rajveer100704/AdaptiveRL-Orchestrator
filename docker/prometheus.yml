@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'gateway'
+    static_configs:
+      - targets: ['gateway:8000']
+  
+  - job_name: 'worker-small'
+    static_configs:
+      - targets: ['worker-small:8001']
+
+  - job_name: 'worker-large'
+    static_configs:
+      - targets: ['worker-large:8001']
