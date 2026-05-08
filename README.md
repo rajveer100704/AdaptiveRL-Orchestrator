@@ -15,6 +15,12 @@ Modern AI serving infrastructure faces a fundamental conflict between **Resource
 ---
 
 ## 2. Architecture Overview
+![Architecture](docs/images/architecture.png)
+
+## 3. Live Platform Demo & Comparison
+Explore the [**Full Project Demo & Comparison**](docs/project_demo.md) for detailed performance breakdowns.
+
+![Live Platform Demo](docs/images/platform_demo.webp)
 
 This project implements a **Hierarchical Control Plane** that separates request-level routing from topology-level capacity control.
 
